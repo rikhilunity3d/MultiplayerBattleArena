@@ -6,10 +6,12 @@ using TMPro;
 public class NetworkPlayer : MonoBehaviourPun
 {
     public TextMeshProUGUI nicknameText;
-    public float health = 100f;
+    public float maxHealth = 100f;
+    private float currentHealth;
 
     private void Start()
     {
+        currentHealth = maxHealth;
         if (photonView.IsMine)
         {
             PhotonNetwork.NickName = "Player" + Random.Range(1000, 9999);
@@ -43,10 +45,10 @@ public class NetworkPlayer : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
 
-        health -= damage;
-        Debug.Log(photonView.Owner.NickName + " took damage. Remaining HP: " + health);
+        currentHealth -= damage;
+        Debug.Log(photonView.Owner.NickName + " took " + damage + " damage. Current HP: " + currentHealth);
 
-        if (health <= 0f)
+        if (currentHealth <= 0)
         {
             Die();
         }
