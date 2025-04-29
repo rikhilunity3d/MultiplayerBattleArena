@@ -10,7 +10,14 @@ public class NetworkPlayer : MonoBehaviourPun
     private float currentHealth;
 
     public GameObject bulletPrefab;
-public Transform shootPoint;
+
+    private Renderer playerRenderer;
+    public Transform shootPoint;
+
+    void Awake()
+    {
+        playerRenderer = GetComponentInChildren<Renderer>(); // Assuming your model has a MeshRenderer
+    }
 
 
     private void Start()
@@ -19,6 +26,10 @@ public Transform shootPoint;
         if (photonView.IsMine)
         {
             PhotonNetwork.NickName = "Player" + Random.Range(1000, 9999);
+
+            Color randomColor = Random.ColorHSV(0f, 1f, 0.8f, 1f, 0.8f, 1f); // Vibrant random color
+            photonView.RPC("SetColor", RpcTarget.AllBuffered, randomColor.r, randomColor.g, randomColor.b);
+
         }
         nicknameText.text = photonView.Owner.NickName;
     }
@@ -63,6 +74,17 @@ public Transform shootPoint;
             Die();
         }
     }
+
+    [PunRPC]
+void SetColor(float r, float g, float b)
+{
+    if (playerRenderer != null)
+    {
+        Color newColor = new Color(r, g, b);
+        playerRenderer.material.color = newColor;
+    }
+}
+
 
     void Die()
     {
