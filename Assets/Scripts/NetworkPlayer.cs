@@ -9,6 +9,10 @@ public class NetworkPlayer : MonoBehaviourPun
     public float maxHealth = 100f;
     private float currentHealth;
 
+    public GameObject bulletPrefab;
+public Transform shootPoint;
+
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -35,6 +39,12 @@ public class NetworkPlayer : MonoBehaviourPun
         {
             photonView.RPC("TakeDamage", RpcTarget.AllBuffered, 10f);
         }
+
+        if (photonView.IsMine && Input.GetMouseButtonDown(0))
+        {
+            PhotonNetwork.Instantiate("Bullet", shootPoint.position, shootPoint.rotation);
+        }
+
 
     }
 
