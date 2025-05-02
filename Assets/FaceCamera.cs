@@ -6,6 +6,8 @@ public class FaceCamera : MonoBehaviour
 {
     void LateUpdate()
     {
-        transform.forward = Camera.main.transform.forward;
+         // Always face the main camera
+        if (Camera.main != null)
+            transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
     }
 }
